@@ -213,7 +213,7 @@ def create_app(test_config=None):
     return jsonify({
         "success": False,
         "error": 400,
-        "message": "Bad Request"
+        "message": "bad request"
     }), 400
 
   @app.errorhandler(404)
@@ -221,7 +221,7 @@ def create_app(test_config=None):
     return jsonify({
         "success": False,
         "error": 404,
-        "message": "Resource Not Found"
+        "message": "resource not found"
     }), 404
 
   @app.errorhandler(422)
@@ -229,7 +229,7 @@ def create_app(test_config=None):
     return jsonify({
         "success": False,
         "error": 422,
-        "message": "Unprocessable Entity"
+        "message": "unprocessable"
     }), 422
   
   return app
