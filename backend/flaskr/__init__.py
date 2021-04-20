@@ -93,8 +93,14 @@ def create_app(test_config=None):
   @app.route("/questions/<question_id>", methods=['DELETE'])
   def delete_question(question_id):
     try:
-      get_question = Question.query.get(question_id)
-      get_question.delete()
+      question_to_be_deleted = Question.query.get(question_id)
+      question_to_be_deleted = Question.query.filter(Question.id == question_id).one_or_none()
+      if (question_to_be_deleted is None):
+        return jsonify({
+          'success': False,
+          'message': 'Invalid question_id'
+        })
+      question_to_be_deleted.delete()
       result = {
           'success': True,
           'deleted': question_id
@@ -102,7 +108,7 @@ def create_app(test_config=None):
       return jsonify(result)
     except Exception as e:
       print(str(e))
-      abort(422)
+      abort(500)
 
   '''
   @TODO: 
@@ -115,23 +121,24 @@ def create_app(test_config=None):
   of the questions list in the "List" tab.  
   '''
   @app.route("/questions", methods=['POST'])
-  def add_question():
-    body = request.get_json()
-    if not ('question' in body and 'answer' in body and 'difficulty' in body and 'category' in body):
-      abort(422)
-    new_question = body.get('question')
-    new_answer = body.get('answer')
-    new_difficulty = body.get('difficulty')
-    new_category = body.get('category')
-
+  def add_new_question():
     try:
-      question = Question(question=new_question, answer=new_answer, difficulty=new_difficulty, category=new_category)
+      body = request.get_json()
+      if not ('question' in body and 'answer' in body and 'difficulty' in body and 'category' in body):
+        abort(422)
+      question = body.get('question', None)
+      answer = body.get('answer', None)
+      difficulty = body.get('difficulty', None)
+      category = body.get('category', None)
+      question = Question(question=question, answer=answer, difficulty=difficulty, category=category)
       question.insert()
-      return jsonify({
+      result = {
         'success': True,
         'created': question.id,
-      })
-    except:
+      }
+      return jsonify(result)
+    except Exception as e:
+      print(str(e))
       abort(422)
 
   '''
