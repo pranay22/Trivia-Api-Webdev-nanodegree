@@ -30,10 +30,8 @@ def create_app(test_config=None):
     '''
     @app.after_request
     def after_request(response):
-        response.headers
-        .add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-        response.headers
-        .add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
         return response
 
     '''
@@ -102,8 +100,7 @@ def create_app(test_config=None):
     def delete_question(question_id):
         try:
             question_to_be_deleted = Question.query.get(question_id)
-            question_to_be_deleted =
-            Question.query.filter(Question.id == question_id).one_or_none()
+            question_to_be_deleted = Question.query.filter(Question.id == question_id).one_or_none()
             if (question_to_be_deleted is None):
                 return jsonify({
                     'success': False,
@@ -171,8 +168,7 @@ def create_app(test_config=None):
             if (search_phrase is not None):
                 search_results = Question.query.filter
                 (Question.question.ilike(f'%{search_phrase}%')).all()
-                formatted_questions =
-                [question.format() for question in search_results]
+                formatted_questions = [question.format() for question in search_results]
                 result = {
                   'success': True,
                   'questions': formatted_questions,
@@ -203,13 +199,13 @@ def create_app(test_config=None):
             (Category.id == category_id).first()
             formatted_category = current_category.format()
             formatted_questions = [question.format() for question in questions]
-            result =
-            return jsonify({
-              'success': True,
-              'questions': formatted_questions,
-              'total_questions': len(questions),
-              'current_category': formatted_category
-            })
+            result = {
+                'success': True,
+                'questions': formatted_questions,
+                'total_questions': len(questions),
+                'current_category': formatted_category
+            }
+            return jsonify(result)
         except Exception as e:
             print(str(e))
             abort(404)
@@ -239,9 +235,7 @@ def create_app(test_config=None):
                 available_questions = Question.query.filter
                 (Question.id.notin_((previous_questions))).all()
             else:
-                available_questions = Question.query
-                .filter_by(category=category['id'])
-                .filter(Question.id.notin_((previous_questions))).all()
+                available_questions = Question.query.filter_by(category=category['id']).filter(Question.id.notin_((previous_questions))).all()
             if len(available_questions):
                 new_question = available_questions
                 [random.randrange(0, len(available_questions))].format()
