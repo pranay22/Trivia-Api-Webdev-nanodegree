@@ -199,71 +199,75 @@ def create_app(test_config=None):
       abort(404)
 
   '''
-  @TODO: 
-  Create a POST endpoint to get questions to play the quiz. 
-  This endpoint should take category and previous question parameters 
-  and return a random questions within the given category, 
-  if provided, and that is not one of the previous questions. 
+  @TODO:
+  Create a POST endpoint to get questions to play the quiz.
+  This endpoint should take category and previous question parameters
+  and return a random questions within the given category,
+  if provided, and that is not one of the previous questions.
 
   TEST: In the "Play" tab, after a user selects "All" or a category,
   one question at a time is displayed, the user is allowed to answer
-  and shown whether they were correct or not. 
+  and shown whether they were correct or not.
   '''
-  @app.route('/quizzes', methods=['POST'])
-  def play_quiz():
-    try:
-      body = request.get_json()
-      category = body.get('quiz_category', None)
-      previous_questions = body.get('previous_questions', [])
+    @app.route('/quizzes', methods=['POST'])
+    def play_quiz():
+        try:
+            body = request.get_json()
+            category = body.get('quiz_category', None)
+            previous_questions = body.get('previous_questions', [])
 
-      if not ('quiz_category' in body and 'previous_questions' in body):
-        abort(422)
-      
-      if category['type'] == 'click':
-        available_questions = Question.query.filter(Question.id.notin_((previous_questions))).all()
-      else:
-        available_questions = Question.query.filter_by(category=category['id']).filter(Question.id.notin_((previous_questions))).all()
-      if len(available_questions):
-        new_question = available_questions[random.randrange(0, len(available_questions))].format()
-      else:
-        new_question = None
-      result = {
-        'success': True,
-        'question': new_question,
-        "timestamp": time()
-      }
-      return jsonify(result)
-    except Exception as e:
-      print(str(e))
-      abort(422)
+            if not ('quiz_category' in body and 'previous_questions' in body):
+                abort(422)
 
-  '''
-  @TODO: 
-  Create error handlers for all expected errors 
-  including 404 and 422. 
-  '''
-  @app.errorhandler(400)
-  def bad_request(error):
-    return jsonify({
-        "success": False,
-        "error": 400,
-        "message": "bad request"
-    }), 400
+            if category['type'] == 'click':
+                available_questions = Question.query.filter
+                (Question.id.notin_((previous_questions))).all()
+            else:
+                available_questions = Question.query
+                .filter_by(category=category['id'])
+                .filter(Question.id.notin_((previous_questions))).all()
+            if len(available_questions):
+                new_question = available_questions
+                [random.randrange(0, len(available_questions))].format()
+            else:
+                new_question = None
+            result = {
+              'success': True,
+              'question': new_question,
+              "timestamp": time()
+            }
+            return jsonify(result)
+        except Exception as e:
+            print(str(e))
+            abort(422)
 
-  @app.errorhandler(404)
-  def not_found(error):
-    return jsonify({
-        "success": False,
-        "error": 404,
-        "message": "resource not found"
-    }), 404
+    '''
+    @TODO:
+    Create error handlers for all expected errors
+    including 404 and 422.
+    '''
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            "success": False,
+            "error": 400,
+            "message": "bad request"
+        }), 400
 
-  @app.errorhandler(422)
-  def unprocessable(error):
-    return jsonify({
-        "success": False,
-        "error": 422,
-        "message": "unprocessable"
-    }), 422
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "message": "resource not found"
+        }), 404
 
-  return app
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "unprocessable"
+        }), 422
+
+    return app
