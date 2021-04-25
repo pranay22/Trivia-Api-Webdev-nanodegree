@@ -8,6 +8,7 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
+
 # Questions pagination
 def paginateQuestions(request, selection):
     page = request.args.get('page', 1, type=int)
@@ -16,6 +17,7 @@ def paginateQuestions(request, selection):
     questions = [question.format() for question in selection]
     currentQuestions = questions[start:end]
     return currentQuestions
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -48,7 +50,7 @@ def create_app(test_config=None):
             result = {
                 'success': True,
                 'categories': {category.id: category.type for category
-                 in categories}
+                               in categories}
             }
             return jsonify(result)
         except Exception as e:
@@ -64,7 +66,8 @@ def create_app(test_config=None):
 
     TEST: At this point, when you start the application
     you should see questions and categories generated,
-    ten questions per page and pagination at the bottom of the screen for three pages.
+    ten questions per page and pagination at the bottom
+    of the screen for three pages.
     Clicking on the page numbers should update the questions.
     '''
     @app.route('/questions', methods=["GET"])
@@ -79,7 +82,8 @@ def create_app(test_config=None):
                 'success': True,
                 'questions': current_questions,
                 'total_questions': len(questions),
-                'categories': {category.id: category.type for category in categories},
+                'categories': {category.id: category.type for category
+                               in categories},
                 'current_category': None
             }
             return jsonify(result)
@@ -90,14 +94,16 @@ def create_app(test_config=None):
     '''
     @TODO:
     Create an endpoint to DELETE question using a question ID.
-    TEST: When you click the trash icon next to a question, the question will be removed.
+    TEST: When you click the trash icon next to a question,
+    the question will be removed.
     This removal will persist in the database and when you refresh the page.
     '''
     @app.route("/questions/<question_id>", methods=['DELETE'])
     def delete_question(question_id):
         try:
             question_to_be_deleted = Question.query.get(question_id)
-            question_to_be_deleted = Question.query.filter(Question.id == question_id).one_or_none()
+            question_to_be_deleted =
+            Question.query.filter(Question.id == question_id).one_or_none()
             if (question_to_be_deleted is None):
                 return jsonify({
                     'success': False,
@@ -120,20 +126,23 @@ def create_app(test_config=None):
     category, and difficulty score.
 
     TEST: When you submit a question on the "Add" tab,
-    the form will clear and the question will appear at the end of the last page
+    the form will clear and the question will appear
+    at the end of the last page
     of the questions list in the "List" tab.
     '''
     @app.route("/questions", methods=['POST'])
     def add_new_question():
         try:
             body = request.get_json()
-            if not ('question' in body and 'answer' in body and 'difficulty' in body and 'category' in body):
+            if not ('question' in body and 'answer' in body and
+                    'difficulty' in body and 'category' in body):
                 abort(422)
             question = body.get('question', None)
             answer = body.get('answer', None)
             difficulty = body.get('difficulty', None)
             category = body.get('category', None)
-            question = Question(question=question, answer=answer, difficulty=difficulty, category=category)
+            question = Question(question=question, answer=answer,
+                                difficulty=difficulty, category=category)
             question.insert()
             result = {
                 'success': True,
@@ -160,8 +169,10 @@ def create_app(test_config=None):
             body = request.get_json()
             search_phrase = body.get('searchTerm', None)
             if (search_phrase is not None):
-                search_results = Question.query.filter(Question.question.ilike(f'%{search_phrase}%')).all()
-                formatted_questions = [question.format() for question in search_results]
+                search_results = Question.query.filter
+                (Question.question.ilike(f'%{search_phrase}%')).all()
+                formatted_questions =
+                [question.format() for question in search_results]
                 result = {
                   'success': True,
                   'questions': formatted_questions,
@@ -186,8 +197,10 @@ def create_app(test_config=None):
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def get_questions_by_category(category_id):
         try:
-            questions = Question.query.filter(Question.category == str(category_id)).order_by(Question.id).all()
-            current_category = Category.query.filter(Category.id == category_id).first()
+            questions = Question.query.filter
+            (Question.category == str(category_id)).order_by(Question.id).all()
+            current_category = Category.query.filter
+            (Category.id == category_id).first()
             formatted_category = current_category.format()
             formatted_questions = [question.format() for question in questions]
             result =
