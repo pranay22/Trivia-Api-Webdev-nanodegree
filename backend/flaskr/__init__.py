@@ -102,7 +102,8 @@ def create_app(test_config=None):
     def delete_question(question_id):
         try:
             question_to_be_deleted = Question.query.get(question_id)
-            question_to_be_deleted = Question.query.filter(Question.id == question_id).one_or_none()
+            question_to_be_deleted = Question.query.filter(
+                Question.id == question_id).one_or_none()
             if (question_to_be_deleted is None):
                 return jsonify({
                     'success': False,
