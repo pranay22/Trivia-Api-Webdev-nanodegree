@@ -170,10 +170,10 @@ def create_app(test_config=None):
             if (search_phrase is not None):
                 search_results = Question.query.filter
                 (Question.question.ilike(f'%{search_phrase}%')).all()
-                formatted_questions = [question.format() for question in search_results]
+                questions = [question.format() for question in search_results]
                 result = {
                   'success': True,
-                  'questions': formatted_questions,
+                  'questions': questions,
                   'total_questions': len(search_results),
                   'current_category': None
                 }
@@ -237,7 +237,9 @@ def create_app(test_config=None):
                 available_questions = Question.query.filter
                 (Question.id.notin_((previous_questions))).all()
             else:
-                available_questions = Question.query.filter_by(category=category['id']).filter(Question.id.notin_((previous_questions))).all()
+                available_questions = Question.query.filter_by(
+                    category=category['id']).filter(
+                        Question.id.notin_((previous_questions))).all()
             if len(available_questions):
                 new_question = available_questions
                 [random.randrange(0, len(available_questions))].format()
