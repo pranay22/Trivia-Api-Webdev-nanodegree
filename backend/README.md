@@ -54,6 +54,104 @@ One note before you delve into your tasks: for each endpoint you are expected to
 8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
 9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
 
+## API Endpoints
+
+GET `\categories` 
+Retrieves a dictionary of all available categories
+- *Request params:* none 
+- *Example response:*  
+```
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "success": true
+}
+```
+
+GET `\questions?page=<page_number>` 
+Retrieves a paginated dictionary of questions of all available categories
+- *Optional Request param:* page:integer 
+- *Example response:*  
+ ``` {
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "Maya Angelou", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },  
+    {
+      "answer": "Escher", 
+      "category": 2, 
+      "difficulty": 1, 
+      "id": 16, 
+      "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 2
+}
+```
+
+DELETE `/questions/<question_id>`
+Delete an existing questions from the repository of available questions  if the request_id exists
+- *Request arguments:* question_id:integer 
+- *Example response:* 
+```
+{
+  "deleted": "23", 
+  "success": true
+}
+```
+
+POST `/questions`
+Add a new question to the list of available questions at the end of page
+- *Request body:* {question:string, answer:string, difficulty:integer, category:string}
+- *Example response:* 
+```
+{
+  "created": 35, 
+  "success": true
+}
+```
+
+POST `/questions/search`
+Fetches all questions where a substring matches the search term (not case-sensitive)
+- *Request body:* {searchTerm:string}
+- *Example response:*
+```
+{
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "Lake Victoria", 
+      "category": 3, 
+      "difficulty": 2, 
+      "id": 13, 
+      "question": "What is the largest lake in Africa?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 1
+}
+```
+
 
 ## Testing
 To run the tests, run
