@@ -121,7 +121,7 @@ Delete an existing questions from the repository of available questions  if the 
 ```
 
 POST `/questions`
-Add a new question to the list of available questions at the end of page
+Adds a new question to the list of available questions at the end of page
 - *Request body:* {question:string, answer:string, difficulty:integer, category:string}
 - *Example response:* 
 ```
@@ -132,7 +132,7 @@ Add a new question to the list of available questions at the end of page
 ```
 
 POST `/questions/search`
-Fetches all questions where a substring matches the search term (not case-sensitive)
+Retrieves all questions where a substring matches the search term (not case-sensitive)
 - *Request body:* {searchTerm:string}
 - *Example response:*
 ```
@@ -149,6 +149,57 @@ Fetches all questions where a substring matches the search term (not case-sensit
   ], 
   "success": true, 
   "total_questions": 1
+}
+```
+
+GET `/categories/<int:category_id>/questions`
+Retrieves a dictionary of questions for the specified category
+- *Request arguments:* category_id:integer
+- *Example response:*
+```
+{
+  "current_category": 1, 
+  "questions": [
+    {
+      "answer": "The Liver", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 20, 
+      "question": "What is the heaviest organ in the human body?"
+    }, 
+    {
+      "answer": "Alexander Fleming", 
+      "category": 1, 
+      "difficulty": 3, 
+      "id": 21, 
+      "question": "Who discovered penicillin?"
+    }, 
+    {
+      "answer": "Blood", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 22, 
+      "question": "Hematology is a branch of medicine involving the study of what?"
+    }, 
+  ], 
+  "success": true, 
+  "total_questions": 3
+}
+```
+POST `/quizzes`
+Retrieves one random question within a specified category. Previously asked questions are not asked again. 
+- *Request body:* {previous_questions: arr, quiz_category: {id:integer, type:string}}
+- *Example response*: 
+```
+{
+  "question": {
+    "answer": "Mona Lisa", 
+    "category": 2, 
+    "difficulty": 3, 
+    "id": 17, 
+    "question": "La Giaconda is better known as what?"
+  }, 
+  "success": true
 }
 ```
 
